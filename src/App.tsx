@@ -57,14 +57,6 @@ const getGoods = (
   sortType: SortType,
   sortDirection: SortDirection = SortDirection.Acs,
 ): Goods => {
-  if (sortType === SortType.Default && sortDirection === SortDirection.Acs) {
-    return goodsFromServer;
-  }
-
-  if (sortType === SortType.Default) {
-    return [...goodsFromServer].reverse();
-  }
-
   const goods = [...goodsFromServer];
 
   switch (sortType) {
@@ -72,22 +64,27 @@ const getGoods = (
       return sortListAlphabetically(goods, sortDirection);
     case SortType.ByLengt:
       return sortListByLength(goods, sortDirection);
-    default:
+    case SortType.Default:
       if (sortDirection === SortDirection.Desc) {
         return goods.reverse();
+      } else {
+        return goodsFromServer;
       }
 
-      return goods;
+    default:
+      return goodsFromServer;
   }
 };
 
 export const App: React.FC = () => {
-  const [sortType, setSortType] = useState<SortType | null>(null);
+  const [sortType, setSortType] = useState<SortType>(SortType.Default);
   const [sortDirection, setSortDirection] = useState<SortDirection>(
     SortDirection.Acs,
   );
 
   const goods = getGoods(sortType, sortDirection);
+  const showResetButton =
+    sortType !== SortType.Default || sortDirection !== SortDirection.Acs;
 
   return (
     <div className="section content">
@@ -107,7 +104,7 @@ export const App: React.FC = () => {
         <button
           type="button"
           className={classname('button', 'is-success', {
-            'is-light': sortType !== SortType.Alphabetically,
+            'is-light': sortType !== SortType.ByLengt,
           })}
           onClick={() => {
             setSortType(SortType.ByLengt);
@@ -130,7 +127,7 @@ export const App: React.FC = () => {
           Reverse
         </button>
 
-        {sortType || sortDirection ? (
+        {showResetButton ? (
           <button
             type="button"
             className={classname('button', 'is-danger', 'is-light')}
