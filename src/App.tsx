@@ -7,12 +7,12 @@ type Goods = string[];
 
 enum SortType {
   Alphabetically,
-  ByLengt,
+  ByLength,
   Default,
 }
 
 enum SortDirection {
-  Acs,
+  Asc,
   Desc,
 }
 
@@ -55,14 +55,14 @@ const sortListByLength = (
 
 const getGoods = (
   sortType: SortType,
-  sortDirection: SortDirection = SortDirection.Acs,
+  sortDirection: SortDirection = SortDirection.Asc,
 ): Goods => {
   const goods = [...goodsFromServer];
 
   switch (sortType) {
     case SortType.Alphabetically:
       return sortListAlphabetically(goods, sortDirection);
-    case SortType.ByLengt:
+    case SortType.ByLength:
       return sortListByLength(goods, sortDirection);
     case SortType.Default:
       if (sortDirection === SortDirection.Desc) {
@@ -79,12 +79,12 @@ const getGoods = (
 export const App: React.FC = () => {
   const [sortType, setSortType] = useState<SortType>(SortType.Default);
   const [sortDirection, setSortDirection] = useState<SortDirection>(
-    SortDirection.Acs,
+    SortDirection.Asc,
   );
 
   const goods = getGoods(sortType, sortDirection);
   const showResetButton =
-    sortType !== SortType.Default || sortDirection !== SortDirection.Acs;
+    sortType !== SortType.Default || sortDirection !== SortDirection.Asc;
 
   return (
     <div className="section content">
@@ -104,10 +104,10 @@ export const App: React.FC = () => {
         <button
           type="button"
           className={classname('button', 'is-success', {
-            'is-light': sortType !== SortType.ByLengt,
+            'is-light': sortType !== SortType.ByLength,
           })}
           onClick={() => {
-            setSortType(SortType.ByLengt);
+            setSortType(SortType.ByLength);
           }}
         >
           Sort by length
@@ -120,7 +120,7 @@ export const App: React.FC = () => {
           })}
           onClick={() => {
             setSortDirection(
-              sortDirection ? SortDirection.Acs : SortDirection.Desc,
+              sortDirection ? SortDirection.Asc : SortDirection.Desc,
             );
           }}
         >
@@ -133,7 +133,7 @@ export const App: React.FC = () => {
             className={classname('button', 'is-danger', 'is-light')}
             onClick={() => {
               setSortType(SortType.Default);
-              setSortDirection(SortDirection.Acs);
+              setSortDirection(SortDirection.Asc);
             }}
           >
             Reset
