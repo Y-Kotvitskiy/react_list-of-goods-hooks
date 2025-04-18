@@ -120,7 +120,9 @@ export const App: React.FC = () => {
           })}
           onClick={() => {
             setSortDirection(
-              sortDirection ? SortDirection.Asc : SortDirection.Desc,
+              sortDirection !== SortDirection.Asc
+                ? SortDirection.Asc
+                : SortDirection.Desc,
             );
           }}
         >
